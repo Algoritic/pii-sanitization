@@ -1,0 +1,56 @@
+2025-12-11 09:15:21 INFO Customer login success
+customer_id=123456789012
+name="Ahmad Firdaus"
+email="ahmad.firdaus@example.com"
+phone="0199161789"
+nric="011020060987"
+passport="A1234567"
+driver_license="D123456789012"
+account_no="4599123412341234"
+transaction_id="TX8932311"
+ip="192.168.0.45"
+postal_code="50450"
+dob="01/10/2006"
+ssn="123-45-6789"
+password="MySecretPassword123!"
+api_key="ABCD1234EFGH5678"
+private_key="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...\n-----END PRIVATE KEY-----"
+hash="5f4dcc3b5aa765d61d8327deb882cf99"
+otp="123456"
+pin="1234"
+
+2025-12-11 09:45:55 ERROR Payment failed
+customer_id=876543210987
+name="Tan Wei Ling"
+email="wei.ling88@gmail.com"
+phone="0175532218"
+nric="020304050607"
+passport="B7654321"
+driver_license="D987654321098"
+account_no="123456789012"
+transaction_id="TX8934321"
+ip="10.0.0.23"
+postal_code="50460"
+dob="02/03/2005"
+ssn="987-65-4321"
+password="TopSecret!"
+api_key="ZYXW9876VUTS5432"
+private_key="-----BEGIN PRIVATE KEY-----\nMIIEoQIBAAKCAQEAs...\n-----END PRIVATE KEY-----"
+hash="098f6bcd4621d373cade4e832627b4f6"
+otp="654321"
+pin="4321"
+
+2025-12-11 10:15:33 INFO Fund transfer completed
+from_account="4599123412341234"
+to_account="123456789012"
+amount=5000.00
+currency="MYR"
+transaction_id="TX8943210"
+customer_ip="192.168.0.100"
+remarks="Transfer for invoice #INV12345"
+
+2025-12-11 10:45:12 INFO System generated API request
+api_key="API1234567890SECRET"
+token="TOKEN987654321"
+secret="SECRETVALUE123"
+hash="abcdef1234567890abcdef1234567890"

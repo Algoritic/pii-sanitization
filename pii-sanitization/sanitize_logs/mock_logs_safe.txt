@@ -1,0 +1,14 @@
+2025-12-10 14:33:21 INFO Customer login success  
+customer_id=01XXXXXXXXXX name="Ahmad Firdaus"  
+email="XXXX@XXXX.XXX"  
+phone="01XXXXXXXXX"  
+nric="01XXXXXXXXXX"  
+transaction_id="TX8932311"  
+ip="192.168.0.45"
+2025-12-10 14:48:55 ERROR Payment failed  
+customer_id=01XXXXXXXXXX name="Tan Wei Ling"  
+email="XXXX@XXXX.XXX"  
+phone="01XXXXXXXXX"  
+passport="PXXXXXXX"  
+card_no="XXXXXXXXXXXX"  
+error="Insufficient balance
