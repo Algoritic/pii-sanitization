@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+sanitize_logs/__init__.py
+sanitize_logs/cli.py
+sanitize_logs/sanitizer.py
+sanitize_logs.egg-info/PKG-INFO
+sanitize_logs.egg-info/SOURCES.txt
+sanitize_logs.egg-info/dependency_links.txt
+sanitize_logs.egg-info/entry_points.txt
+sanitize_logs.egg-info/top_level.txt

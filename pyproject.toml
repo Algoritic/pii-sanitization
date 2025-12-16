@@ -1,0 +1,16 @@
+[project]
+name = "sanitize_logs"
+version = "1.0.0"
+description = "Sanitize PII in user prompts before sending to GitHub Copilot"
+authors = [
+  { name = "Elly", email = "elly@maybank.com" }
+]
+requires-python = ">=3.9"
+readme = "README.md"
+
+[project.scripts]
+sanitize-logs = "sanitize_logs.cli:main"
+
+[build-system]
+requires = ["setuptools>=42", "wheel", "build"]
+build-backend = "setuptools.build_meta"

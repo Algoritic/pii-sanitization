@@ -1,0 +1,2 @@
+[console_scripts]
+sanitize-logs = sanitize_logs.cli:main

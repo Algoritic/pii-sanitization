@@ -1,0 +1,137 @@
+Metadata-Version: 2.4
+Name: sanitize_logs
+Version: 1.0.0
+Summary: Sanitize PII in user prompts before sending to GitHub Copilot
+Author-email: Elly <elly@maybank.com>
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# PII Sanitization Utility (`sanitize_logs`)
+
+This utility provides a command-line interface (CLI) to automatically detect and mask sensitive Personally Identifiable Information (PII) within log files or any text-based files.
+
+It uses regular expressions to replace patterns like NRICs, phone numbers, emails, and credit card numbers with generic placeholders, creating a "safe" version of your logs for secure sharing or processing.
+
+---
+
+## Installation
+
+This project uses `pyproject.toml` and is set up to be installed using a modern Python package manager.
+
+### Prerequisites
+
+* Python 3.9+
+* A package manager like `pip` or `pipx`.
+
+### Using `pipx` (Recommended for CLI Tools)
+
+If you only want to use the CLI tool without managing a project virtual environment:
+
+```bash
+# Navigate to the root directory of the project (where pyproject.toml is)
+# cd /Users/00157197ellynoorsyakirahimanabintirokmanuddin/Documents/pii-sanitization
+cd /Users/../Documents/pii-sanitization
+
+
+# Install the tool
+pipx install .
+````
+
+### Using `pip` (For development or project integration)
+
+If you need the tool installed within a virtual environment:
+
+```bash
+# Navigate to the root directory of the project
+cd /Users/../Documents/pii-sanitization
+
+# Create and activate a virtual environment (optional but recommended)
+python -m venv .venv
+source .venv/bin/activate # On Linux/macOS
+# .venv\Scripts\activate.bat # On Windows
+
+# Install the tool in editable mode
+pip install -e .
+```
+
+-----
+
+## Usage
+
+Once installed, the CLI tool is available as `sanitize-logs`.
+
+### Basic Command
+
+To sanitize one or more files, simply provide their paths. By default, this creates a new file with the suffix `_safe` appended to the original filename.
+
+  * **Example (Processing `logs.md`):**
+
+    ```bash
+    sanitize-logs sanitize_logs/logs.md
+    ```
+
+    **Output:**
+
+    ```
+    [CREATED] sanitize_logs/logs_safe.md
+    ```
+
+    The original file (`logs.md`) remains untouched, and a new file (`logs_safe.md`) is created with the PII masked.
+
+### Overwriting Files (In-Place)
+
+To overwrite the original file(s) with the sanitized output, use the `--in-place` flag.
+
+**Caution:** This action is irreversible. The original PII-containing data will be permanently overwritten.
+
+  * **Example (Overwriting `logs.md`):**
+
+    ```bash
+    sanitize-logs --in-place sanitize_logs/logs.md
+    ```
+
+    **Output:**
+
+    ```
+    [OVERWRITTEN] sanitize_logs/logs.md
+    ```
+
+### Sanitizing Multiple Files
+
+You can pass multiple file paths to the command:
+
+```bash
+sanitize-logs file1.log file2.txt /path/to/another/file.log
+```
+
+-----
+
+## How PII Masking Works
+
+The core sanitization logic is located in `sanitize_logs/sanitizer.py`. It uses the following regular expression rules to identify and replace PII:
+
+| PII Type | Pattern Used | Replacement Mask |
+| :--- | :--- | :--- |
+| **NRIC** | `\b\d{12}\b` (12-digit number) | `01XXXXXXXXXX` |
+| **Phone** | `\b\d{8,11}\b` (8-11 digit number) | `01XXXXXXXXX` |
+| **Passport** | `\b([A-Za-z])\d{7}\b` (Letter followed by 7 digits) | `PXXXXXXX` |
+| **Bank/Card** | `\b\d{12,16}\b` (12-16 digit number) | `XXXXXXXXXXXX` |
+| **Email** | Standard email regex pattern | `XXXX@XXXX.XXX` |
+
+-----
+
+## Project Structure
+
+The key files in this project are:
+
+| File | Description |
+| :--- | :--- |
+| `pyproject.toml` | Defines the project metadata and entry point for the `sanitize-logs` CLI. |
+| `sanitize_logs/cli.py` | The command-line interface entry point. Handles argument parsing and file I/O. |
+| `sanitize_logs/sanitizer.py` | Contains the `sanitize_text` function with all the PII masking logic (regex rules). |
+| `sanitize_logs/logs.md` | An example file for testing the sanitization process. |
+
+```
+
+Would you like to know how the example log file (`logs.md`) looks *after* it's been sanitized?
+```
