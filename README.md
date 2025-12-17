@@ -1,127 +1,99 @@
-# PII Sanitization Utility (`sanitize_logs`)
+# PII Sanitization Tool
 
-This utility provides a command-line interface (CLI) to automatically detect and mask sensitive Personally Identifiable Information (PII) within log files or any text-based files.
+A Python-based utility designed to mask **Personally Identifiable Information (PII)** and sensitive financial data from log files or text documents. This ensures compliance with **Bank Negara Malaysia (BNM)** standards and **PDPA** requirements before sharing data with external LLMs or third-party tools like GitHub Copilot.
 
-It uses regular expressions to replace patterns like NRICs, phone numbers, emails, and credit card numbers with generic placeholders, creating a "safe" version of your logs for secure sharing or processing.
+## Features
+
+* **Financial Data Masking:** Automatically detects and masks Card Numbers, Account Numbers, and Transaction IDs.
+* **Identity Protection:** Redacts NRIC (IC Numbers), Passport Numbers, and Driver Licenses.
+* **Security Scrubber:** Removes passwords, API keys, private keys, and hashes.
+* **Contact Info:** Masks Malaysian phone numbers, emails, and IP addresses.
+* **Flexible Output:** Create a new `_safe` copy by default or overwrite files using the `--in-place` flag.
 
 ---
 
 ## Installation
 
-This project uses `pyproject.toml` and is set up to be installed using a modern Python package manager.
-
-### Prerequisites
-
-* Python 3.9+
-* A package manager like `pip` or `pipx`.
-
-### Using `pipx` (Recommended for CLI Tools)
-
-If you only want to use the CLI tool without managing a project virtual environment:
+To install the tool using the provided wheel file, run one of the following commands in your terminal (ensure you are in the project root directory):
 
 ```bash
-# Navigate to the root directory of the project (where pyproject.toml is)
-cd /Users/../Documents/pii-sanitization
+# Using pip
+pip install --force-reinstall dist/pii_sanitization-1.0.0-py3-none-any.whl
 
+# Or using pip3
+pip3 install --force-reinstall dist/pii_sanitization-1.0.0-py3-none-any.whl
 
-# Install the tool
-pipx install .
-````
-
-### Using `pip` (For development or project integration)
-
-If you need the tool installed within a virtual environment:
-
-```bash
-# Navigate to the root directory of the project
-cd /Users/../Documents/pii-sanitization
-
-# Create and activate a virtual environment (optional but recommended)
-python -m venv .venv
-source .venv/bin/activate # On Linux/macOS
-# .venv\Scripts\activate.bat # On Windows
-
-# Install the tool in editable mode
-pip install -e .
 ```
 
------
+---
 
 ## Usage
 
-Once installed, the CLI tool is available as `sanitize-logs`.
+Once installed, the `pii-sanitization` command will be available in your terminal.
 
-### Basic Command
+### 1. Basic Sanitization (Creates a Copy)
 
-To sanitize one or more files, simply provide their paths. By default, this creates a new file with the suffix `_safe` appended to the original filename.
-
-  * **Example (Processing `logs.md`):**
-
-    ```bash
-    sanitize-logs sanitize_logs/logs.md
-    ```
-
-    **Output:**
-
-    ```
-    [CREATED] sanitize_logs/logs_safe.md
-    ```
-
-    The original file (`logs.md`) remains untouched, and a new file (`logs_safe.md`) is created with the PII masked.
-
-### Overwriting Files (In-Place)
-
-To overwrite the original file(s) with the sanitized output, use the `--in-place` flag.
-
-**Caution:** This action is irreversible. The original PII-containing data will be permanently overwritten.
-
-  * **Example (Overwriting `logs.md`):**
-
-    ```bash
-    sanitize-logs --in-place sanitize_logs/logs.md
-    ```
-
-    **Output:**
-
-    ```
-    [OVERWRITTEN] sanitize_logs/logs.md
-    ```
-
-### Sanitizing Multiple Files
-
-You can pass multiple file paths to the command:
+By default, the tool creates a new file with the suffix `_safe`. The original file remains untouched.
 
 ```bash
-sanitize-logs file1.log file2.txt /path/to/another/file.log
-```
-
------
-
-## How PII Masking Works
-
-This sanitizer covers data classes explicitly protected under PDPA 2010, Financial Services Act (FSA), BNM Technology Risk & Information Security expectations.
-
-The core sanitization logic is located in `sanitize_logs/sanitizer.py`. It uses the following regular expression rules to identify and replace PII:
-
-| PII Type | Pattern Used | Replacement Mask |
-| :--- | :--- | :--- |
-| **NRIC** | `\b\d{12}\b` (12-digit number) | '[IC NUMBER]' |
-| **Phone** | `\b\d{8,11}\b` (8-11 digit number) | '[PHONE NUMBER]' |
-| **Passport** | `\b([A-Za-z])\d{7}\b` (Letter followed by 7 digits) | '[PASSPORT NUMBER]' |
-| **Bank/Card** | `\b\d{12,16}\b` (12-16 digit number) | '[CARD NUMBER]' |
-| **Email** | Standard email regex pattern | '[EMAIL]' |
-
------
-
-## Project Structure
-
-The key files in this project are:
-
-| File | Description |
-| :--- | :--- |
-| `pyproject.toml` | Defines the project metadata and entry point for the `sanitize-logs` CLI. |
-| `sanitize_logs/cli.py` | The command-line interface entry point. Handles argument parsing and file I/O. |
-| `sanitize_logs/sanitizer.py` | Contains the `sanitize_text` function with all the PII masking logic (regex rules). |
-| `sanitize_logs/logs.md` | An example file for testing the sanitization process. |
+pii-sanitization <path_to_your_file_to_be_masked>
 
 ```
+
+*Example:* `pii-sanitization app_logs.txt` will create `app_logs_safe.txt`.
+
+### 2. Sanitize Multiple Files
+
+You can pass multiple files at once:
+
+```bash
+pii-sanitization log1.txt log2.log data.csv
+
+```
+
+### 3. In-Place Overwrite
+
+If you wish to overwrite the original file directly without creating a copy, use the `--in-place` flag:
+
+```bash
+pii-sanitization --in-place <path_to_your_file.log>
+
+```
+
+### 4. Help Command
+
+To see all available options, run:
+
+```bash
+pii-sanitization --help
+
+```
+
+---
+
+## Masking Logic Overview
+
+The tool uses regex-based rules to identify and replace sensitive patterns:
+
+| Data Type | Masked Format |
+| --- | --- |
+| **NRIC / MyKad** | `[IC NUMBER]` |
+| **Bank Account** | `[ACCOUNT NUMBER]` |
+| **Credit Card** | `[CARD NUMBER]` |
+| **Passwords/Secrets** | `[PASSWORD]` / `[SECRET]` |
+| **Private Keys** | `[PRIVATE KEY]` |
+| **MY Phone No.** | `[PHONE NUMBER]` |
+
+---
+
+## Development
+
+If you need to rebuild the distribution file after making changes to `sanitizer.py`:
+
+1. Ensure you have the `build` package: `pip install build`
+2. Run the build command: `python -m build`
+3. Re-install the new `.whl` file from the `dist/` folder.
+
+**Author:** Elly (ellynoorsyakirahimana.rokmanuddin@maybank.com)
+
+---
